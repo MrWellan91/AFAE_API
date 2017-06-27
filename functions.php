@@ -31,17 +31,15 @@ function test_input($data)
 function convertDateToSql($date)
 {
     Try {
-        if(!is_a($date, "DateTime")){
-            if(strpos($date, '/'))
+        if (!is_a($date, "DateTime")) {
+            if (strpos($date, '/'))
                 $date = DateTime::createFromFormat("d/m/Y", $date);
-            else if(strpos($date, '-'))
+            else if (strpos($date, '-'))
                 $date = DateTime::createFromFormat("d-m-Y", $date);
         }
         $date = $date->format("Y-m-d");
 
-    }
-    catch(Exception $e)
-    {
+    } catch (Exception $e) {
         echo $e->getMessage();
     }
 
@@ -50,17 +48,15 @@ function convertDateToSql($date)
 
 function convertDateFromSql($date)
 {
-    Try{
-        if(!is_a($date, "DateTime")){
-            if(strpos($date, '/'))
+    Try {
+        if (!is_a($date, "DateTime")) {
+            if (strpos($date, '/'))
                 $date = DateTime::createFromFormat("d/m/Y", $date);
-            else if(strpos($date, '-'))
+            else if (strpos($date, '-'))
                 $date = DateTime::createFromFormat("Y-m-d", $date);
         }
         $date = $date->format("d-m-Y");
-    }
-    catch ( Exception $e)
-    {
+    } catch (Exception $e) {
         echo $e->getMessage();
     }
     return $date;
@@ -91,11 +87,25 @@ function compareDate($date1, $date2)
     return false;
 }
 
-function isPostSet($var){
+function isPostSet($var)
+{
     return (isset($_POST[$var]) && !empty($_POST[$var]));
 }
 
-function isGetSet($var){
+function isGetSet($var)
+{
     return (isset($_GET[$var]) && !empty($_GET[$var]));
 
+}
+
+function json($json)
+{
+    $json = json_encode($json);
+    $nb = strlen($json);
+    if ($nb > 0) {
+        $json[0] = " ";
+        $json[$nb - 1] = " ";
+    }
+
+    return $json;
 }

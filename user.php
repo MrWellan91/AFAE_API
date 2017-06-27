@@ -3,10 +3,30 @@ require_once("config.php");
 require_once("functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
-    if (isGetSet("user")) {
+    if (isGetSet("user") && isGetSet("objets")) {
         $user = User::loadUserWithId(test_input($_GET['user']));
         if (is_a($user, "User")) {
-            echo test_input(json_encode($user));
+            $objMan = new ObjectManager();
+            $result = $objMan->loadObjectsFromUser($user);
+            switch ($result) {
+                case 0: {
+                    echo test_input(json($objMan));
+                }
+                    break;
+                case 1:
+                    echo "{}";
+                    break;
+                case 2:
+                    echo '{"Code" : "' . $CODE['CODE_19']['Code'] . '", "Message" : "' . $CODE['CODE_19']['Message'] . '"}';
+                    break;
+            }
+        } else {
+            echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
+        }
+    } else if (isGetSet("user")) {
+        $user = User::loadUserWithId(test_input($_GET['user']));
+        if (is_a($user, "User")) {
+            echo test_input(json($user));
         } else {
             echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
         }

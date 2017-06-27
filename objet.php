@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if (isGetSet("objet") && isGetSet("action") && $_GET['action'] == "info") {
         $obj = Object::loadObjectFromId(test_input($_GET['objet']));
         if (is_a($obj, "Object")) {
-            echo test_input(json_encode($obj));
+            echo test_input(json($obj));
         } else {
             echo '{"Code" : "' . $CODE['CODE_9']['Code'] . '", "Message" : "' . $CODE['CODE_9']['Message'] . '"}';
         }

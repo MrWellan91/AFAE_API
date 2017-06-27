@@ -361,7 +361,7 @@ class Object implements JsonSerializable
         $drop = ($this->baisse()) ? 1 : 0;
         $sold = ($this->vendu()) ? 1 : 0;
 
-        return '{"idobjet" : "' . $this->idObjet() . '", "idfoire" : "' . $this->idFoire() . '", "numitem" : "' . $this->numItem() . '", "iduser" : "' . $this->user()->id() . '", "description" : "' . $this->desc() . '", "nbitems" : "' . $this->nbItems() . '", "size" : "' . $this->taille() . '", "drop" : "' . $drop . '", "price" : "' . $this->prix() . '", "sold" : "' . $sold . '", }';
+        return '{"idobjet" : "' . $this->idObjet() . '", "idfoire" : "' . $this->idFoire() . '", "numitem" : "' . $this->numItem() . '", "iduser" : "' . $this->user()->id() . '", "description" : "' . $this->desc() . '", "nbitems" : "' . $this->nbItems() . '", "size" : "' . $this->taille() . '", "drop" : "' . $drop . '", "price" : "' . $this->prix() . '", "sold" : "' . $sold . '" }';
     }
 
 }

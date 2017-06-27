@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__) . "/../config.php");
 require_once('User.php');
 
-class ObjectManager
+class ObjectManager implements JsonSerializable
 {
     private $_objets;
 
@@ -61,10 +61,11 @@ class ObjectManager
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return 2;
         }
         if (is_bool($data))
-            throw new Exception("Erreur lors de la selection sur la table objet pour l'utilisateur num $user->id() <br> Function Name: loadObjectsFromUser");
+            return 1;
+
         $query->closeCursor();
 
         $arrObject = array();
@@ -75,6 +76,7 @@ class ObjectManager
         }
 
         $this->setObjets($arrObject);
+        return 0;
     }
 
     /**
@@ -184,5 +186,20 @@ class ObjectManager
                 array_push($objetArr, $objet);
         }
         return $objetArr;
+    }
+
+    public function jsonSerialize()
+    {
+        $string = "";
+
+        foreach($this->objets() as $objet){
+            $string .= stripslashes($objet->jsonSerialize()).", ";
+        }
+        $nb = strlen($string);
+        if($nb > 2)
+            $string[$nb-2] = " ";
+
+        $string = '{ "objets" : [ ' . $string . ' ]}';
+        return $string;
     }
 }

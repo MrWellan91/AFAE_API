@@ -22,7 +22,6 @@ $config = array(
     "max_object_assoc" => 200
 );
 
-define("TEMPLATES_PATH", realpath(dirname(__FILE__) . '/templates'));
 define("CLASS_PATH", realpath(dirname(__FILE__) . '/classes'));
 define("ERROR_PATH", realpath(dirname(__FILE__) . '/errors'));
 
@@ -72,6 +71,8 @@ $CODE = array(
     "CODE_17" => array("Code" => 17,
         "Message" => "Aucun champs mis à jour, vérifiez que vos champs comportent les bons noms"),
     "CODE_18" => array("Code" => 18,
-        "Message" => "Erreur pendant la mise à jour de cet objet")
+        "Message" => "Erreur pendant la mise à jour de cet objet"),
+    "CODE_19" => array("Code" => 19,
+        "Message" => "Erreur lors de la requête SQL")
 
 );
