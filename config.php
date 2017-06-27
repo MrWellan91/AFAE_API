@@ -48,5 +48,13 @@ $CODE = array(
     "CODE_5" => array("Code" => 5,
         "Message" => "Erreur inconnue pendant la création de cet utilisateur"),
     "CODE_6" => array("Code" => 6,
-        "Message" => "Champs password vide")
+        "Message" => "Champs password vide"),
+    "CODE_7" => array("Code" => 7,
+        "Message" => "Champs login/password vide(s)"),
+    "CODE_8" => array("Code" => 8,
+        "Message" => "Login/Mot de passe erroné(s)"),
+    "CODE_9" => array("Code" => 9,
+        "Message" => "Cet id ne correspond à aucun objet"),
+    "CODE_10" => array("Code" => 10,
+        "Message" => "Cet id ne correspond à aucune foire")
 );

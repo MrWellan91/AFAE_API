@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . "/../config.php");
 
-class Object
+class Object implements JsonSerializable
 {
     private $_idObjet;
     private $_numItem;
@@ -125,7 +125,7 @@ class Object
         else {
             $user = (int)$user;
             $user = User::loadUserWithId($user);
-            if(!is_null($user))
+            if (!is_null($user))
                 $this->_utilisateur = $user;
         }
     }
@@ -349,16 +349,25 @@ class Object
         return true;
     }
 
-    public function vendre(){
+    public function vendre()
+    {
         $this->setVendu(true);
         $db = connectToDb();
         $query = $db->prepare("UPDATE objet SET vendu=TRUE WHERE idobjet=:idobjet;");
         $query->bindValue(':idobjet', $this->idObjet(), PDO::PARAM_INT);
-        try{
+        try {
             $query->execute();
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function jsonSerialize()
+    {
+        $drop = ($this->baisse()) ? 1 : 0;
+        $sold = ($this->vendu()) ? 1 : 0;
+
+        return '{"idobjet" : "' . $this->idObjet() . '", "idfoire" : "' . $this->idFoire() . '", "numitem" : "' . $this->numItem() . '", "iduser" : "' . $this->user()->id() . '", "description" : "' . $this->desc() . '", "nbitems" : "' . $this->nbItems() . '", "size" : "' . $this->taille() . '", "drop" : "' . $drop . '", "price" : "' . $this->prix() . '", "sold" : "' . $sold . '", }';
     }
 
 }

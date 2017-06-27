@@ -1,0 +1,39 @@
+
+RewriteEngine on
+
+RewriteRule ^/?$ /api/ [R]
+
+
+RewriteRule ^api/?$ /index.php
+
+#get infos sur un utilisateur
+Header set Access-Control-Allow-Origin "*"
+RewriteRule ^api/user/([0-9]+)/?$ /user.php?user=$1
+
+#get infos sur un objet
+Header set Access-Control-Allow-Origin "*"
+RewriteRule ^api/objet/([0-9]+)/?$ /objet.php?objet=$1
+
+#get infos sur une foire
+Header set Access-Control-Allow-Origin "*"
+RewriteRule ^api/foire/([0-9]+)/?$ /foire.php?foire=$1
+
+#Mettre a jour infos utilisateur
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/user/update/?$ /user.php?action=update
+
+#Creer un utilisateur
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/user/create/?$ /user.php?action=create
+
+#Mettre a jour mot de passe
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/user/update/password/?$ /user.php?action=updatepwd
+
+#Connexion
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/connexion/?$ /connexion.php

@@ -3,14 +3,14 @@ require_once("config.php");
 require_once("functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
-    if (isGetSet("user")) {
-        $user = User::loadUserWithId(test_input($_GET['user']));
-        if (is_a($user, "User")) {
-            echo test_input(json_encode($user));
-        } else {
-            echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
+        if (isGetSet("user")) {
+            $user = User::loadUserWithId(test_input($_GET['user']));
+            if (is_a($user, "User")) {
+                echo test_input(json_encode($user));
+            } else {
+                echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
+            }
         }
-    }
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isGetSet("action") && $_GET['action'] == "update") {
         if (isPostSet('iduser')) {
@@ -123,8 +123,14 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             }
 
             $user = User::createUser($name, $fName, $address, $cp, $ville, $telephone, $baisse, $rang, $email);
-            if ($user->insertIntoDb($login, $mdp))
-                echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '"}';
+            if ($user->insertIntoDb($login, $mdp)){
+                $user = User::loadFromBd($login, $mdp);
+                $id = 0;
+                if(is_a($user, "User")){
+                    $id = $user->id();
+                }
+                echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '", "iduser" : "'.$id.'"}';
+            }
             else
                 echo '{"Code" : "' . $CODE['CODE_5']['Code'] . '", "Message" : "' . $CODE['CODE_5']['Message'] . '"}';
         }

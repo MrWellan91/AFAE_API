@@ -1,5 +1,6 @@
 <?php
-class Foire
+
+class Foire implements JsonSerializable
 {
     private $_idFoire;
     private $_nomFoire;
@@ -59,15 +60,18 @@ class Foire
         return $this->_prixBaisse;
     }
 
-    public function maxObj(){
+    public function maxObj()
+    {
         return $this->_maxObj;
     }
 
-    public function maxObjAssoc(){
+    public function maxObjAssoc()
+    {
         return $this->_maxObjAssoc;
     }
 
-    public function retenue(){
+    public function retenue()
+    {
         return $this->_retenue;
     }
 
@@ -96,7 +100,7 @@ class Foire
 
     public function setDateDebutFoire($date)
     {
-        if(is_a($date, "DateTime"))
+        if (is_a($date, "DateTime"))
             $this->_dateDebutFoire = $date;
         else
             $this->_dateDebutFoire = convertDateFromSql($date);
@@ -104,7 +108,7 @@ class Foire
 
     public function setDateFinFoire($date)
     {
-        if(is_a($date, "DateTime"))
+        if (is_a($date, "DateTime"))
             $this->_dateFinFoire = $date;
         else
             $this->_dateFinFoire = convertDateFromSql($date);
@@ -112,7 +116,7 @@ class Foire
 
     public function setDateDebutSaisie($date)
     {
-        if(is_a($date, "DateTime"))
+        if (is_a($date, "DateTime"))
             $this->_dateDebutSaisie = $date;
         else
             $this->_dateDebutSaisie = convertDateFromSql($date);
@@ -120,25 +124,29 @@ class Foire
 
     public function setDateFinSaisie($date)
     {
-        if(is_a($date, "DateTime"))
+        if (is_a($date, "DateTime"))
             $this->_dateFinSaisie = $date;
         else
             $this->_dateFinSaisie = convertDateFromSql($date);
     }
 
-    public function setPrixBaise($prix){
+    public function setPrixBaise($prix)
+    {
         $this->_prixBaisse = $prix;
     }
 
-    public function setMaxObj($nb){
+    public function setMaxObj($nb)
+    {
         $this->_maxObj = $nb;
     }
 
-    public function setMaxObjAssoc($nb){
+    public function setMaxObjAssoc($nb)
+    {
         $this->_maxObjAssoc = $nb;
     }
 
-    public function setRetenue($retenue){
+    public function setRetenue($retenue)
+    {
         $this->_retenue = $retenue;
     }
 
@@ -161,13 +169,13 @@ class Foire
                 $this->setDateDebutSaisie($data['datedebutsaisie']);
             if (isset($data['datefinsaisie']))
                 $this->setDateFinSaisie($data['datefinsaisie']);
-            if(isset($data['prixbaisse']))
+            if (isset($data['prixbaisse']))
                 $this->setPrixBaise($data['prixbaisse']);
-            if(isset($data['maxobj']))
+            if (isset($data['maxobj']))
                 $this->setMaxObj($data['maxobj']);
-            if(isset($data['maxobjassoc']))
+            if (isset($data['maxobjassoc']))
                 $this->setMaxObjAssoc($data['maxobjassoc']);
-            if(isset($data['retenue']))
+            if (isset($data['retenue']))
                 $this->setRetenue($data['retenue']);
         }
     }
@@ -259,48 +267,57 @@ class Foire
 
     public function __toString()
     {
-        return $this->nomFoire();
+        return $this->nomFoire() . "";
     }
 
-    public function getNbVendeurs(){
+    public function getNbVendeurs()
+    {
         $db = connectToDb();
         $query = $db->prepare("SELECT COUNT(*) AS Nb_Vendeur FROM participant WHERE valide=TRUE AND idfoire=:idfoire;");
         $query->bindValue(':idfoire', $this->idFoire(), PDO::PARAM_INT);
-        try{
+        try {
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
 
         return $data['Nb_Vendeur'];
     }
 
-    public function getNbObjets(){
+    public function getNbObjets()
+    {
         $db = connectToDb();
         $query = $db->prepare("SELECT COUNT(*) AS Nb_Objets FROM objet WHERE idfoire=:idfoire;");
         $query->bindValue(':idfoire', $this->idFoire(), PDO::PARAM_INT);
-        try{
+        try {
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
 
         return $data['Nb_Objets'];
     }
 
-    public function getNbObjetsVendu(){
+    public function getNbObjetsVendu()
+    {
         $db = connectToDb();
         $query = $db->prepare("SELECT COUNT(*) AS Nb_Objets FROM objet WHERE idfoire=:idfoire and vendu=TRUE;");
         $query->bindValue(':idfoire', $this->idFoire(), PDO::PARAM_INT);
-        try{
+        try {
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
 
         return $data['Nb_Objets'];
+    }
+
+
+    public function jsonSerialize()
+    {
+        return '{"idfoire" : "' . $this->idFoire() . '", "name" : "' . $this->nomFoire() . '", "iduser" : "' . $this->idAdmin() . '", "idassociation" : "' . $this->idAssoc() . '", "baisse" : "' . $this->prixBaisse() . '", "retenue" : "' . $this->retenue() . '", "maxobj" : "' . $this->maxObj() . '", "maxobjassoc" : "' . $this->maxObjAssoc() . '", "datedebutsaisie" : "' . $this->dateDebutSaisie() . '", "datefinsaisie" : "' . $this->dateFinSaisie() . '", "datedebutfoire" : "' . $this->dateDebutFoire() . '", "datefinfoire" : "' . $this->dateFinFoire() . '"}';
     }
 }

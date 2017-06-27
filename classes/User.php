@@ -61,7 +61,8 @@ class User implements JsonSerializable
         if(md5($password)==$data['motdepasse'])
             $user->hydrate($data);
         $query->closeCursor();
-
+        if(is_null($user->id()))
+            return null;
         return $user;
     }
 
