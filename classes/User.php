@@ -79,11 +79,11 @@ class User implements JsonSerializable
             echo $e->getMessage();
         }
         if($data != false) {
-            $query->closeCursor();
             $user = new self();
             $user->hydrate($data);
             return $user;
         }
+        $query->closeCursor();
         return null;
     }
 

@@ -190,7 +190,7 @@ class Object implements JsonSerializable
     {
 
         $db = connectToDb();
-        $query = $db->prepare("SELECT idobjet, numitem, idfoire, idutilisateur, description, baisse, prix, vendu, taille, nbitem, verrou FROM objet WHERE idobjet=:idobj");
+        $query = $db->prepare("SELECT * FROM objet WHERE idobjet=:idobj");
         $query->bindValue(':idobj', $idObjet, PDO::PARAM_INT);
         try {
             $query->execute();
@@ -199,18 +199,19 @@ class Object implements JsonSerializable
             echo $e->getMessage();
         }
         $query->closeCursor();
-
-        $objet = new self();
-        $objet->hydrate($data);
-        return $objet;
-
+        if($data != false) {
+            $objet = new self();
+            $objet->hydrate($data);
+            return $objet;
+        }
+        return null;
     }
 
     public static function loadObjectFromFoire($numItem, $idUser, $idFoire)
     {
 
         $db = connectToDb();
-        $query = $db->prepare("SELECT idobjet, numitem, idfoire, idutilisateur, description, baisse, prix, vendu, taille, nbitem, verrou FROM objet WHERE numitem=:numitem AND idfoire=:idfoire AND idutilisateur=:iduser;");
+        $query = $db->prepare("SELECT * FROM objet WHERE numitem=:numitem AND idfoire=:idfoire AND idutilisateur=:iduser;");
         $query->bindValue(':numitem', $numItem, PDO::PARAM_INT);
         $query->bindValue(':iduser', $idUser, PDO::PARAM_INT);
         $query->bindValue(':idfoire', $idFoire, PDO::PARAM_INT);
@@ -229,24 +230,17 @@ class Object implements JsonSerializable
 
     }
 
-    public function updateObject($desc, $baisse, $prix, $taille, $nbItem)
+    public function updateObject()
     {
         $db = connectToDb();
-        $query = $db->prepare("UPDATE objet SET description=:descr, baisse=:baisse, prix=:prix, taille=:taille, nbitem=:nbitem WHERE idutilisateur=:iduser AND idfoire=:idfoire AND numitem=:numitem;");
-        $query->bindValue(':iduser', $this->user()->id(), PDO::PARAM_INT);
-        $query->bindValue(':idfoire', $this->idFoire(), PDO::PARAM_INT);
-        $query->bindValue(':numitem', $this->numItem(), PDO::PARAM_INT);
-        $query->bindValue(':descr', $desc);
-        $query->bindValue(':baisse', $baisse, PDO::PARAM_BOOL);
-        $query->bindValue(':prix', $prix);
-        $query->bindValue(':taille', $taille);
-        $query->bindValue(':nbitem', $nbItem, PDO::PARAM_INT);
+        $query = $db->prepare("UPDATE objet SET description=:descr, baisse=:baisse, prix=:prix, taille=:taille, nbitem=:nbitem WHERE idobjet=:idobjet;");
+        $query->bindValue(':idobjet', $this->idObjet(), PDO::PARAM_INT);
+        $query->bindValue(':descr', $this->desc());
+        $query->bindValue(':baisse', $this->baisse(), PDO::PARAM_BOOL);
+        $query->bindValue(':prix', $this->prix());
+        $query->bindValue(':taille', $this->taille());
+        $query->bindValue(':nbitem', $this->nbItems(), PDO::PARAM_INT);
 
-        $this->setDesc($desc);
-        $this->setBaisse($baisse);
-        $this->setPrix($prix);
-        $this->setTaille($taille);
-        $this->setNbItems($nbItem);
 
         try {
             $query->execute();
@@ -292,7 +286,7 @@ class Object implements JsonSerializable
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            return $e->getMessage();
+            return 1;
         }
 
         $assoc = Association::loadFromAdmin($this->user()->id());
@@ -321,9 +315,9 @@ class Object implements JsonSerializable
                 return $e->getMessage();
             }
         } else {
-            return '<div class="alert alert-warning">' . $this . ' non ins&eacute;r&eacute;. Vous avez atteint le quota pour cette foire.';
+            return 2;
         }
-        return true;
+        return 0;
     }
 
     public function __toString()

@@ -3,57 +3,71 @@ require_once("config.php");
 require_once("functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
-        if (isGetSet("user")) {
-            $user = User::loadUserWithId(test_input($_GET['user']));
-            if (is_a($user, "User")) {
-                echo test_input(json_encode($user));
-            } else {
-                echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
-            }
+    if (isGetSet("user")) {
+        $user = User::loadUserWithId(test_input($_GET['user']));
+        if (is_a($user, "User")) {
+            echo test_input(json_encode($user));
+        } else {
+            echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
         }
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isGetSet("action") && $_GET['action'] == "update") {
         if (isPostSet('iduser')) {
             $user = User::loadUserWithId(test_input($_POST['iduser']));
             if (is_a($user, "User")) {
 
+                $nbModif = 0;
+
                 if (isPostSet('name')) {
                     $user->setName(test_input($_POST['name']));
+                    $nbModif++;
                 }
                 if (isPostSet('firstname')) {
                     $user->setFName(test_input($_POST['firstname']));
+                    $nbModif++;
                 }
                 if (isPostSet('codepostal')) {
                     $user->setCodePostal(test_input($_POST['codepostal']));
+                    $nbModif++;
                 }
                 if (isPostSet('email')) {
                     $user->setEmail(test_input($_POST['email']));
+                    $nbModif++;
                 }
 
                 if (isPostSet('city')) {
                     $user->setCity(test_input($_POST['city']));
+                    $nbModif++;
                 }
                 if (isPostSet('alloweddrop')) {
                     $baisse = test_input($_POST['alloweddrop']);
                     $baisse = $baisse == 'true' || $baisse == 1;
                     $user->setDrop($baisse);
+                    $nbModif++;
                 }
                 if (isPostSet('address')) {
                     $user->setAddress(test_input($_POST['address']));
+                    $nbModif++;
                 }
 
                 if (isPostSet('phone')) {
                     $user->setPhone(test_input($_POST['phone']));
+                    $nbModif++;
                 }
 
                 if (isPostSet('rang')) {
                     $user->setRank(test_input($_POST['rang']));
+                    $nbModif++;
                 }
-
-                if ($user->updateUser()) {
-                    echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '"}';
+                if ($nbModif > 0) {
+                    if ($user->updateUser()) {
+                        echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '"}';
+                    } else {
+                        echo '{"Code" : "' . $CODE['CODE_4']['Code'] . '", "Message" : "' . $CODE['CODE_4']['Message'] . '"}';
+                    }
                 } else {
-                    echo '{"Code" : "' . $CODE['CODE_4']['Code'] . '", "Message" : "' . $CODE['CODE_4']['Message'] . '"}';
+                    echo '{"Code" : "' . $CODE['CODE_17']['Code'] . '", "Message" : "' . $CODE['CODE_17']['Message'] . '"}';
                 }
             } else {
                 echo '{"Code" : "' . $CODE['CODE_2']['Code'] . '", "Message" : "' . $CODE['CODE_2']['Message'] . '"}';
@@ -61,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         } else {
             echo '{"Code" : "' . $CODE['CODE_1']['Code'] . '", "Message" : "' . $CODE['CODE_1']['Message'] . '"}';
         }
-    } else if (isGetSet("action") && $_GET['action'] == "create") {
+    } else if (isGetSet("action") && $_GET['action'] == "insert") {
         //var_dump($_POST);
         if (!isPostSet('name') || !isPostSet('firstname')) {
             echo '{"Code" : "' . $CODE['CODE_3']['Code'] . '", "Message" : "' . $CODE['CODE_3']['Message'] . '"}';
@@ -123,15 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             }
 
             $user = User::createUser($name, $fName, $address, $cp, $ville, $telephone, $baisse, $rang, $email);
-            if ($user->insertIntoDb($login, $mdp)){
+            if ($user->insertIntoDb($login, $mdp)) {
                 $user = User::loadFromBd($login, $mdp);
                 $id = 0;
-                if(is_a($user, "User")){
+                if (is_a($user, "User")) {
                     $id = $user->id();
                 }
-                echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '", "iduser" : "'.$id.'"}';
-            }
-            else
+                echo '{"Code" : "' . $CODE['CODE_0']['Code'] . '", "Message" : "' . $CODE['CODE_0']['Message'] . '", "iduser" : "' . $id . '"}';
+            } else
                 echo '{"Code" : "' . $CODE['CODE_5']['Code'] . '", "Message" : "' . $CODE['CODE_5']['Message'] . '"}';
         }
     } else if (isGetSet("action") && $_GET['action'] == "updatepwd") {
@@ -145,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
                     } else {
                         echo '{"Code" : "' . $CODE['CODE_4']['Code'] . '", "Message" : "' . $CODE['CODE_4']['Message'] . '"}';
                     }
-                }else {
+                } else {
                     echo '{"Code" : "' . $CODE['CODE_6']['Code'] . '", "Message" : "' . $CODE['CODE_6']['Message'] . '"}';
                 }
 

@@ -12,7 +12,22 @@ RewriteRule ^api/user/([0-9]+)/?$ /user.php?user=$1
 
 #get infos sur un objet
 Header set Access-Control-Allow-Origin "*"
-RewriteRule ^api/objet/([0-9]+)/?$ /objet.php?objet=$1
+RewriteRule ^api/objet/([0-9]+)/?$ /objet.php?action=info&objet=$1
+
+#Delete object
+Header set Access-Control-Allow-Origin "*"
+RewriteRule ^api/objet/([0-9]+)/delete/?$ /objet.php?action=delete&objet=$1
+
+#Insert object
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/objet/insert/?$ /objet.php?action=insert
+
+#Update object
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/objet/update/?$ /objet.php?action=update
+
 
 #get infos sur une foire
 Header set Access-Control-Allow-Origin "*"
@@ -26,7 +41,7 @@ RewriteRule ^api/user/update/?$ /user.php?action=update
 #Creer un utilisateur
 Header set Access-Control-Allow-Origin "*"
 RewriteCond %{REQUEST_METHOD} POST
-RewriteRule ^api/user/create/?$ /user.php?action=create
+RewriteRule ^api/user/insert/?$ /user.php?action=insert
 
 #Mettre a jour mot de passe
 Header set Access-Control-Allow-Origin "*"

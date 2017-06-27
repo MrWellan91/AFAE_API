@@ -56,5 +56,22 @@ $CODE = array(
     "CODE_9" => array("Code" => 9,
         "Message" => "Cet id ne correspond à aucun objet"),
     "CODE_10" => array("Code" => 10,
-        "Message" => "Cet id ne correspond à aucune foire")
+        "Message" => "Cet id ne correspond à aucune foire"),
+    "CODE_11" => array("Code" => 11,
+        "Message" => "Cet objet n'a pas pu être supprimé (verrou ou raison inconnue)"),
+    "CODE_12" => array("Code" => 12,
+        "Message" => "Champs idobjet vide"),
+    "CODE_13" => array("Code" => 13,
+        "Message" => "Erreur inconnue pendant l'insertion de l'objet dans la base de donnée"),
+    "CODE_14" => array("Code" => 14,
+        "Message" => "Cet utilisateur a dépassé le nombre d'objets max"),
+    "CODE_15" => array("Code" => 15,
+        "Message" => "Erreur pendant la création de l'objet"),
+    "CODE_16" => array("Code" => 16,
+        "Message" => "Il manque 1 ou plusieurs champs nécessaires à la création de l'objet"),
+    "CODE_17" => array("Code" => 17,
+        "Message" => "Aucun champs mis à jour, vérifiez que vos champs comportent les bons noms"),
+    "CODE_18" => array("Code" => 18,
+        "Message" => "Erreur pendant la mise à jour de cet objet")
+
 );
