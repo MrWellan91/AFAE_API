@@ -238,7 +238,8 @@ class Foire implements JsonSerializable
         try {
             $query->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            $query->closeCursor();
+            return array("ErrorCode" => 1, "Message" => $e->getMessage());
         }
 
         $query = $db->prepare("SELECT idFoire FROM foire WHERE nomfoire=:nomfoire AND datedebutfoire=:ddf AND datefinfoire=:dff AND idadmin=:idadmin");
@@ -251,8 +252,8 @@ class Foire implements JsonSerializable
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-
-            echo $e->getMessage();
+            $query->closeCursor();
+            return array("ErrorCode" => 2, "Message" => $e->getMessage());
         }
         $query = $db->prepare('INSERT INTO participant(idutilisateur, idfoire, valide) VALUES (:idadmin, :idfoire, TRUE);');
         $query->bindValue(':idadmin', $this->idAdmin(), PDO::PARAM_INT);
@@ -260,9 +261,12 @@ class Foire implements JsonSerializable
         try {
             $query->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            $query->closeCursor();
+            return array("ErrorCode" => 3, "Message" => $e->getMessage());
         }
         $query->closeCursor();
+
+        return array("ErrorCode" => 0, "Message" => "No errors");
     }
 
     public function __toString()

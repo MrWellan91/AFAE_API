@@ -36,6 +36,16 @@ RewriteRule ^api/objet/update/?$ /objet.php?action=update
 Header set Access-Control-Allow-Origin "*"
 RewriteRule ^api/foire/([0-9]+)/?$ /foire.php?foire=$1
 
+#Creer foire
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/foire/insert/?$ /foire.php?action=insert
+
+#Modifier foire
+Header set Access-Control-Allow-Origin "*"
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule ^api/foire/update/?$ /update.php?action=update
+
 #get objets d'un user d'une foire
 Header set Access-Control-Allow-Origin "*"
 RewriteRule ^api/foire/([0-9]+)/vendeur/([0-9]+)/?$ /foire.php?foire=$1&user=$2
@@ -59,7 +69,7 @@ Header set Access-Control-Allow-Origin "*"
 RewriteCond %{REQUEST_METHOD} POST
 RewriteRule ^api/user/update/password/?$ /user.php?action=updatepwd
 
-#Connexion
+#Participant
 Header set Access-Control-Allow-Origin "*"
 RewriteCond %{REQUEST_METHOD} POST
-RewriteRule ^api/connexion/?$ /connexion.php
+RewriteRule ^api/foire/participant/?$ /foire.php?action=participant

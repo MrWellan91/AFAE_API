@@ -109,3 +109,35 @@ function json($json)
 
     return $json;
 }
+
+function testDate($date)
+{
+    try {
+        $d = DateTime::createFromFormat("d-m-Y", $date);
+        $d = $d->format("d-m-y");
+    } catch (Exception $e) {
+        return 1;
+    }
+    return $d;
+
+}
+
+error_reporting(0);
+
+function shutDownFunction()
+{
+    $error = error_get_last();
+    // fatal error, E_ERROR === 1
+    if ($error['type'] === E_ERROR) {
+        errorHandler(E_ERROR, $error['message'], $error['file'], $error['line']);
+    }
+}
+
+register_shutdown_function('shutDownFunction');
+
+function errorHandler($code, $message, $file, $line)
+{
+    echo '{"Code" : ' . $code . ', "Message" : "' . $message . '", "File" : "' . $file . '", "Line" : ' . $line . '}';
+}
+
+set_error_handler('errorHandler');

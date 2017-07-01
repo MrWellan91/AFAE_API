@@ -67,12 +67,22 @@ $CODE = array(
     "CODE_15" => array("Code" => 15,
         "Message" => "Erreur pendant la création de l'objet"),
     "CODE_16" => array("Code" => 16,
-        "Message" => "Il manque 1 ou plusieurs champs nécessaires à la création de l'objet"),
+        "Message" => "Il manque 1 ou plusieurs champs nécessaires à la création de votre objet/foire"),
     "CODE_17" => array("Code" => 17,
         "Message" => "Aucun champs mis à jour, vérifiez que vos champs comportent les bons noms"),
     "CODE_18" => array("Code" => 18,
         "Message" => "Erreur pendant la mise à jour de cet objet"),
     "CODE_19" => array("Code" => 19,
-        "Message" => "Erreur lors de la requête SQL")
+        "Message" => "Erreur lors de la requête SQL"),
+    "CODE_20" => array("Code" => 20,
+        "Message" => "Erreur pendant l'insertion dans la table foire"),
+    "CODE_21" => array("Code" => 21,
+        "Message" => "Cet idassociation n'existe pas"),
+    "CODE_22" => array("Code" => 22,
+        "Message" => "Champs dates au mauvais format, bon format : (jj-mm-AAAA)"),
+    "CODE_23" => array("Code" => 23,
+        "Message" => "Erreur lors de l'insertion dans la table participant"),
+    "Code_501" => array("Code" => 501,
+        "Message" => "Not implemented")
 
 );

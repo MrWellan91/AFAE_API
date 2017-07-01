@@ -160,4 +160,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             echo '{"Code" : "' . $CODE['CODE_12']['Code'] . '", "Message" : "' . $CODE['CODE_12']['Message'] . '"}';
         }
     }
+} else {
+    echo '{"Code" : "' . $CODE['CODE_501']['Code'] . '", "Message" : "' . $CODE['CODE_501']['Message'] . '"}';
 }

@@ -86,7 +86,7 @@ class Association
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return 1;
         }
         $query->closeCursor();
         $obj = new self();

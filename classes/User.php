@@ -54,7 +54,7 @@ class User implements JsonSerializable
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return null;
         }
         $user = new self();
         $user->setLogin($login);
@@ -76,14 +76,15 @@ class User implements JsonSerializable
             $data = $query->fetch(PDO::FETCH_ASSOC);
 
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            $query->closeCursor();
+            return null;
         }
+        $query->closeCursor();
         if($data != false) {
             $user = new self();
             $user->hydrate($data);
             return $user;
         }
-        $query->closeCursor();
         return null;
     }
 

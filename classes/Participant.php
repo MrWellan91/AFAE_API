@@ -45,13 +45,15 @@ class Participant
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            return 1;
         }
 
         if (is_bool($data))
-            return "Vous n'avez pas acc&eacute;s &agrave; cette foire.";
+            return 2;
+
         $part = new self();
         $part->hydrate($data);
+
         return $part;
     }
 
@@ -73,10 +75,10 @@ class Participant
         } catch (PDOException $e) {
             $query->closeCursor();
             if ($e->getCode() == 23000)
-                return false;
+                return 1;
         }
         $query->closeCursor();
-        return true;
+        return 0;
     }
 
     public static function validerPart($idUser, $idFoire)
@@ -88,11 +90,25 @@ class Participant
             $query->execute();
         } catch (PDOException $e) {
             $query->closeCursor();
-            echo '<div class="alert alert-danger">'.$e->getMessage().'</div>';
-            return false;
+            return array("ErrorCode" => 1, "Message" => $e->getMessage());
         }
         $query->closeCursor();
-        return true;
+        return array("ErrorCode" => 0, "Message" => "No errors");
+    }
+
+    public function valider()
+    {
+        $query = connectToDb()->prepare("UPDATE participant SET valide=TRUE WHERE idutilisateur=:iduser AND idfoire=:idfoire");
+        $query->bindValue(':iduser', $this->idUser(), PDO::PARAM_INT);
+        $query->bindValue(':idfoire', $this->idFoire(), PDO::PARAM_INT);
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            $query->closeCursor();
+            return array("ErrorCode" => 1, "Message" => $e->getMessage());
+        }
+        $query->closeCursor();
+        return array("ErrorCode" => 0, "Message" => "No errors");
     }
 
     public function hydrate(array $data)

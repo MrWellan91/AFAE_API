@@ -193,7 +193,7 @@ class ObjectManager implements JsonSerializable
         $string = "";
 
         foreach($this->objets() as $objet){
-            $string .= stripslashes($objet->jsonSerialize()).", ";
+            $string .= stripslashes(json($objet)).", ";
         }
         $nb = strlen($string);
         if($nb > 2)
